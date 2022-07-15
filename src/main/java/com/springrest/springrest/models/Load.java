@@ -2,39 +2,53 @@ package com.springrest.springrest.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.springrest.springrest.validations.validation;
+
 @Entity
-public class Load {
+public class Load implements validation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int loadId;
+	
+	@Column(nullable=false)
 	private String loadingPoint;
+	@Column(nullable=false)
 	private String unloadingPoint;
+	@Column(nullable=false)
 	private String productType;
-	private String trucktype;
+	@Column(nullable=false)
+	private String truckType;
+	@Column(nullable=false)
 	private String noOfTrucks;
+	@Column(nullable=false)
 	private String weight;
 	private String comment;
+	@Column(nullable=false)
 	private String shipperId;
-	private Date Date;
+	@Column(nullable=false)
+	@JsonFormat(pattern="dd-MM-yyyy")
+	private Date date;
 	
-	public Load(int loadId, String loadingPoint, String unloadingPoint, String productType, String trucktype,
-			    String noOfTrucks, String weight, String comment, String shipperId, java.util.Date date) {
+	public Load(int loadId, String loadingPoint, String unloadingPoint, String productType, String truckType,
+			    String noOfTrucks, String weight, String comment, String shipperId, Date date) {
 		super();
 		this.loadId = loadId;
 		this.loadingPoint = loadingPoint;
 		this.unloadingPoint = unloadingPoint;
 		this.productType = productType;
-		this.trucktype = trucktype;
+		this.truckType = truckType;
 		this.noOfTrucks = noOfTrucks;
 		this.weight = weight;
 		this.comment = comment;
 		this.shipperId = shipperId;
-		this.Date = date;
+		this.date = date;
 	}
 
 	public Load() {
@@ -74,12 +88,12 @@ public class Load {
 		this.productType = productType;
 	}
 
-	public String getTrucktype() {
-		return trucktype;
+	public String getTruckType() {
+		return truckType;
 	}
 
-	public void setTrucktype(String trucktype) {
-		this.trucktype = trucktype;
+	public void setTruckType(String truckType) {
+		this.truckType = truckType;
 	}
 	
 	public String getNoOfTrucks() {
@@ -115,17 +129,25 @@ public class Load {
 	}
 
 	public Date getDate() {
-		return Date;
+		return date;
 	}
 
 	public void setDate(Date date) {
-		Date = date;
+		this.date = date;
 	}
 
 	@Override
 	public String toString() {
 		return "Load [loadId=" + loadId + ", loadingPoint=" + loadingPoint + ", unloadingPoint=" + unloadingPoint
-				+ ", productType=" + productType + ", trucktype=" + trucktype + ", noOfTrucks=" + noOfTrucks
-				+ ", weight=" + weight + ", comment=" + comment + ", shipperId=" + shipperId + ", Date=" + Date + "]";
+				+ ", productType=" + productType + ", trucktype=" + truckType + ", noOfTrucks=" + noOfTrucks
+				+ ", weight=" + weight + ", comment=" + comment + ", shipperId=" + shipperId + ", Date=" + date + "]";
+	}
+
+	@Override
+	public void checkValidString(String value) {
+		if(value == null || value.trim().length() < 1) {
+			throw new RuntimeException("Not Setting a Valid String at "
+									   + new Exception().getStackTrace()[1].getMethodName());
+		}
 	}
 }
